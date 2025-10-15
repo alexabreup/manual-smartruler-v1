@@ -1,0 +1,56 @@
+:root {
+  --color-scheme: dark !important;
+
+  /* Cores principais do tema */
+  --sl-color-accent: #f97316; /* Laranja principal */
+  --sl-color-accent-high: #ea580c;
+  --sl-color-accent-low: #fed7aa;
+
+  /* Fundo e contraste */
+  --sl-color-bg: #fffaf5;
+  --sl-color-bg-nav: #fff4eb;
+  --sl-color-text: #1a1a1a;
+
+  /* Links */
+  --sl-color-link: var(--sl-color-accent);
+  --sl-color-link-hover: var(--sl-color-accent-high);
+
+  /* Bordas e destaques */
+  --sl-color-border: #fcd9b6;
+  --sl-color-bg-alt: #fff8f3;
+}
+
+/* Tema escuro */
+:root[data-theme='dark'] {
+  --sl-color-bg: #1b120b;
+  --sl-color-bg-nav: #2b1c10;
+  --sl-color-text: #fef6ed;
+  --sl-color-accent: #fb923c;
+  --sl-color-accent-high: #f97316;
+  --sl-color-accent-low: #78350f;
+  --sl-color-border: #4d2b10;
+  --sl-color-link: var(--sl-color-accent);
+  --sl-color-link-hover: var(--sl-color-accent-high);
+}
+
+.custom-footer {
+  background: linear-gradient(to right, #ea580c, #f97316, #fb923c);
+  color: #fff;
+  text-align: center;
+  padding: 2rem 1rem;
+  margin-top: 3rem;
+}
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+.footer-links a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+}
+.footer-links a:hover {
+  text-decoration: underline;
+}
