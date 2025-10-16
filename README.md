@@ -1,49 +1,61 @@
-# Starlight Starter Kit: Basics
+# Manual Smart Ruler v1
 
-[![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
+Manual de instalação em campo do dispositivo IoT Smart Ruler Eletromidia.
+
+## 📋 Sobre
+
+Este projeto contém a documentação completa para instalação do dispositivo Smart Ruler, desenvolvido pelo Departamento de Projetos da Eletromidia.
+
+## 🚀 Tecnologias
+
+- **Astro** - Framework web moderno
+- **Starlight** - Sistema de documentação
+- **TypeScript** - Tipagem estática
+- **CSS Custom** - Temas personalizados
+
+## 📁 Estrutura do Projeto
 
 ```
-npm create astro@latest -- --template starlight
-```
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro + Starlight project, you'll see the following folders and files:
-
-```
-.
-├── public/
 ├── src/
-│   ├── assets/
-│   ├── content/
-│   │   └── docs/
-│   └── content.config.ts
-├── astro.config.mjs
-├── package.json
-└── tsconfig.json
+│   ├── assets/          # Imagens e recursos
+│   ├── components/      # Componentes Astro
+│   ├── content/docs/    # Documentação MDX
+│   └── styles/          # Estilos customizados
+├── public/              # Assets estáticos
+├── astro.config.mjs     # Configuração do Astro
+└── netlify.toml         # Configuração do Netlify
 ```
 
-Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
+## 🛠️ Comandos
 
-Images can be added to `src/assets/` and embedded in Markdown with a relative link.
+```bash
+# Instalar dependências
+npm install
 
-Static assets, like favicons, can be placed in the `public/` directory.
+# Servidor de desenvolvimento
+npm run dev
 
-## 🧞 Commands
+# Build para produção
+npm run build
 
-All commands are run from the root of the project, from a terminal:
+# Preview do build
+npm run preview
+```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## 🌐 Deploy
 
-## 👀 Want to learn more?
+O projeto está configurado para deploy automático no Netlify:
 
-Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+- **Build command**: `npm run build`
+- **Publish directory**: `dist`
+- **Node version**: 18
+
+## 📞 Contato
+
+**Departamento de Projetos Eletromidia 2025**
+
+Alexandre de Abreu - [alexandre.abreu@eletromidia.com.br](mailto:alexandre.abreu@eletromidia.com.br)
+
+## 📄 Licença
+
+© 2025 Departamento de Projetos — Eletromidia
