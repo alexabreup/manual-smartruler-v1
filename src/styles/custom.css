@@ -73,3 +73,10 @@ html[data-theme='dark'] {
   color: var(--sl-color-link-hover);
   text-decoration: underline;
 }
+
+/* Reduzir tamanho da imagem da capa */
+.hero img {
+  width: 38% !important;
+  height: auto !important;
+  max-width: 400px;
+}
