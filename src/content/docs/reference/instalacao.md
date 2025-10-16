@@ -3,13 +3,7 @@ title: Manual de Instalação e Uso – Smart Ruler Eletromidia
 description: A reference page in my new Starlight docs site.
 ---
 
- 
-
-## Bem-vindo!
-
-Bem-vindo ao guia de instalação e uso da sua **Smart Ruler**! Este manual rápido foi desenvolvido para garantir que você aproveite ao máximo sua régua elétrica inteligente, integrada à plataforma **IoT Hub da Eletromidia**. A Smart Ruler oferece controle independente local e remoto de quatro tomadas, gerenciadas por um ESP32, proporcionando eficiência e flexibilidade para o seu MUB Eletromidia.
-
-## 1. Instalação da Smart Ruler no MUB Eletromidia
+ ## 1. Instalação da Smart Ruler no MUB Eletromidia
 
 Siga os passos abaixo para uma instalação rápida e segura do seu dispositivo.
 
