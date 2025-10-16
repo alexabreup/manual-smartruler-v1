@@ -5,21 +5,21 @@
 <script is:inline>
   // Executa imediatamente para evitar flash de tema claro
   (function() {
-    // Força tema escuro como padrão, ignorando preferência do sistema
     const savedTheme = localStorage.getItem('theme');
     
-    // Se não há preferência salva OU se está em modo 'auto', força dark
-    if (!savedTheme || savedTheme === 'auto') {
+    // Se não há preferência salva, define dark como padrão
+    if (!savedTheme) {
       document.documentElement.setAttribute('data-theme', 'dark');
       localStorage.setItem('theme', 'dark');
-    } else {
-      // Aplica o tema salvo (apenas se for 'light' ou 'dark' explicitamente)
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    }
-    
-    // Remove qualquer referência ao tema 'auto' do sistema
-    if (savedTheme === 'auto') {
+    } 
+    // Se está em modo 'auto', converte para dark
+    else if (savedTheme === 'auto') {
+      document.documentElement.setAttribute('data-theme', 'dark');
       localStorage.setItem('theme', 'dark');
+    }
+    // Se há tema explícito (light ou dark), aplica normalmente
+    else {
+      document.documentElement.setAttribute('data-theme', savedTheme);
     }
   })();
 </script>
