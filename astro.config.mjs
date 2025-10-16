@@ -21,7 +21,7 @@ export default defineConfig({
 					label: 'Intro',
 					items: [
 						// Each item here is one entry in the navigation menu.
-						{ label: 'Manual de Instalação em Campo do Dispositivo IoT Smart Ruler Eletromidia', slug: 'intro/example' },
+						{ label: 'Manual de Instalação em Campo do Dispositivo IoT Smart Ruler Eletromidia', slug: 'intro/intro' },
 					],
 				},
 				{
