@@ -12,7 +12,7 @@ Este documento é o **Manual de Instalação e Uso** da **Smart Ruler Eletromidi
 
 A Smart Ruler é um dispositivo essencial para a modernização e o gerenciamento eficiente dos nossos equipamentos de campo. Ela oferece um controle de energia inovador, permitindo o acionamento e desacionamento remoto, via nossa **Plataforma IoT Hub**, de até quatro tomadas independentes.
 
-O coração do sistema é um microcontrolador ESP32, garantindo comunicação estável e confiável com a rede.
+O nucleo do sistema é um microcontrolador ESP32, garantindo comunicação estável e confiável com a rede.
 
 ## Objetivo deste Manual
 
@@ -22,6 +22,6 @@ Aqui você encontrará:
 
 * **Instruções de Fixação:** Onde e como fixar a Smart Ruler no chassi do MUB.
 * **Conexões Padrão:** O roteiro exato para conectar o Modem, o PC NUC e as tomadas de serviço/futuras.
-* **Funcionalidades IoT:** Detalhes sobre o controle remoto e as funcionalidades que otimizam a operação dos seus mobiliários urbanos.
+
 
 Prossiga para a seção de **Manual de Instalação e Uso** para começar.

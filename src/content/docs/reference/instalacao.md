@@ -50,7 +50,6 @@ A régua possui quatro tomadas com funções específicas dentro do ecossistema 
 A Smart Ruler é o centro de controle inteligente do seu MUB, oferecendo:
 
 * **Controle Independente:** Cada uma das quatro tomadas (exceto a "ENTRADA DIRETA") pode ser acionada e desativada de forma independente.
-* **Acionamento Local:** Botões físicos no dispositivo permitem o controle direto das tomadas.
 * **Acionamento Remoto:** Gerencie suas tomadas de qualquer lugar através da **plataforma IoT Hub da Eletromidia**, otimizando o consumo de energia e a operação dos seus equipamentos.
 * **Monitoramento:** Acompanhe o status e o consumo das tomadas (se aplicável ao modelo) diretamente pela plataforma.
 
