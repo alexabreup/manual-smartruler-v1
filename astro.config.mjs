@@ -14,6 +14,7 @@ export default defineConfig({
 			components: {
 				Footer: './src/components/Footer.astro',
 			},
+			defaultLocale: 'pt',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
 			sidebar: [
 				{
