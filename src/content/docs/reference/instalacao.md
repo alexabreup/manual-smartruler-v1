@@ -41,7 +41,7 @@ A régua possui quatro tomadas com funções específicas dentro do ecossistema 
 
 ***
 
-![Etapas de Instalação](/src/assets/images/smartuler-etapas.png)
+![Etapas de Instalação](/smartuler-etapas.png)
 
 
 ### Detalhamento das Conexões
