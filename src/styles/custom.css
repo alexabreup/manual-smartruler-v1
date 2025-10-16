@@ -98,3 +98,112 @@ html[data-theme='auto'] {
     --sl-color-link-hover: var(--sl-color-accent-high);
   }
 }
+
+/* Padrão de circuito eletrônico adaptável aos temas */
+.circuit-pattern {
+  position: relative;
+  overflow: hidden;
+}
+
+.circuit-pattern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.03;
+  background-image: 
+    /* Linhas horizontais */
+    linear-gradient(90deg, currentColor 1px, transparent 1px),
+    /* Linhas verticais */
+    linear-gradient(0deg, currentColor 1px, transparent 1px),
+    /* Padrão de círculos/pads */
+    radial-gradient(circle at 25% 25%, currentColor 1px, transparent 1px),
+    radial-gradient(circle at 75% 25%, currentColor 1px, transparent 1px),
+    radial-gradient(circle at 25% 75%, currentColor 1px, transparent 1px),
+    radial-gradient(circle at 75% 75%, currentColor 1px, transparent 1px),
+    /* Padrão de conexões diagonais */
+    linear-gradient(45deg, transparent 48%, currentColor 49%, currentColor 51%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, currentColor 49%, currentColor 51%, transparent 52%);
+  background-size: 
+    20px 20px,
+    20px 20px,
+    40px 40px,
+    40px 40px,
+    40px 40px,
+    40px 40px,
+    60px 60px,
+    60px 60px;
+  background-position: 
+    0 0,
+    0 0,
+    0 0,
+    20px 0,
+    0 20px,
+    20px 20px,
+    0 0,
+    0 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Aplicar padrão ao body para tema escuro */
+html:not([data-theme]),
+html[data-theme='dark'],
+html[data-theme='auto'] {
+  --circuit-color: #fb923c;
+}
+
+html[data-theme='dark'] body,
+html:not([data-theme]) body {
+  background-color: var(--sl-color-bg);
+}
+
+html[data-theme='dark'] body::before,
+html:not([data-theme]) body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.02;
+  background-image: 
+    linear-gradient(90deg, var(--circuit-color) 1px, transparent 1px),
+    linear-gradient(0deg, var(--circuit-color) 1px, transparent 1px),
+    radial-gradient(circle at 25% 25%, var(--circuit-color) 1px, transparent 1px),
+    radial-gradient(circle at 75% 25%, var(--circuit-color) 1px, transparent 1px),
+    radial-gradient(circle at 25% 75%, var(--circuit-color) 1px, transparent 1px),
+    radial-gradient(circle at 75% 75%, var(--circuit-color) 1px, transparent 1px);
+  background-size: 30px 30px, 30px 30px, 60px 60px, 60px 60px, 60px 60px, 60px 60px;
+  background-position: 0 0, 0 0, 0 0, 30px 0, 0 30px, 30px 30px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Aplicar padrão ao body para tema claro */
+html[data-theme='light'] {
+  --circuit-color: #f97316;
+}
+
+html[data-theme='light'] body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.015;
+  background-image: 
+    linear-gradient(90deg, var(--circuit-color) 1px, transparent 1px),
+    linear-gradient(0deg, var(--circuit-color) 1px, transparent 1px),
+    radial-gradient(circle at 25% 25%, var(--circuit-color) 1px, transparent 1px),
+    radial-gradient(circle at 75% 25%, var(--circuit-color) 1px, transparent 1px),
+    radial-gradient(circle at 25% 75%, var(--circuit-color) 1px, transparent 1px),
+    radial-gradient(circle at 75% 75%, var(--circuit-color) 1px, transparent 1px);
+  background-size: 30px 30px, 30px 30px, 60px 60px, 60px 60px, 60px 60px, 60px 60px;
+  background-position: 0 0, 0 0, 0 0, 30px 0, 0 30px, 30px 30px;
+  pointer-events: none;
+  z-index: -1;
+}
