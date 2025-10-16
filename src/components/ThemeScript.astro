@@ -2,19 +2,18 @@
 // Script para definir tema escuro como padrão, mantendo opção de alternar
 ---
 
-<script>
-  // Define tema escuro como padrão, mas permite alternância
-  if (typeof window !== 'undefined') {
+<script is:inline>
+  // Executa imediatamente para evitar flash de tema claro
+  (function() {
     // Verifica se não há preferência salva
     const savedTheme = localStorage.getItem('theme');
     if (!savedTheme) {
       // Define o tema escuro como padrão apenas se não há preferência salva
       document.documentElement.setAttribute('data-theme', 'dark');
       localStorage.setItem('theme', 'dark');
+    } else {
+      // Aplica o tema salvo
+      document.documentElement.setAttribute('data-theme', savedTheme);
     }
-    
-    // Aplica o tema salvo ou padrão
-    const theme = savedTheme || 'dark';
-    document.documentElement.setAttribute('data-theme', theme);
-  }
+  })();
 </script>

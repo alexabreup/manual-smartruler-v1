@@ -1,4 +1,8 @@
-:root {
+/* Tema escuro como padrão - aplicado imediatamente */
+:root,
+html,
+html:not([data-theme]),
+html[data-theme='dark'] {
   /* Cores principais do tema escuro (padrão) */
   --sl-color-accent: #fb923c; /* Laranja principal */
   --sl-color-accent-high: #f97316;
@@ -18,19 +22,6 @@
   --sl-color-bg-alt: #2a2a2a;
 }
 
-/* Força tema escuro por padrão quando não há atributo data-theme */
-html:not([data-theme]) {
-  --sl-color-accent: #fb923c;
-  --sl-color-accent-high: #f97316;
-  --sl-color-accent-low: #404040;
-  --sl-color-bg: #1a1a1a;
-  --sl-color-bg-nav: #2a2a2a;
-  --sl-color-text: #f5f5f5;
-  --sl-color-border: #404040;
-  --sl-color-bg-alt: #2a2a2a;
-  --sl-color-link: var(--sl-color-accent);
-  --sl-color-link-hover: var(--sl-color-accent-high);
-}
 
 /* Tema claro (opcional) */
 :root[data-theme='light'] {
