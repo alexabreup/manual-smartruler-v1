@@ -18,7 +18,7 @@ A Smart Ruler foi projetada para ser instalada de forma estratégica no **chassi
 
 ### 1.3. Alimentação da Smart Ruler
 
-1.  Conecte o **cabo de força tripolar** (não incluso) na entrada de alimentação da Smart Ruler.
+1.  Conecte o **cabo de energia tripolar** (não incluso) na entrada de alimentação da Smart Ruler.
 2.  Antes de ligar, **verifique a integridade e o correto posicionamento do fusível de 10 Amperes.**
 3.  A Smart Ruler possui **ajuste automático de tensão (110V/220V)**, eliminando a necessidade de seleção manual e garantindo compatibilidade com diferentes redes elétricas.
 

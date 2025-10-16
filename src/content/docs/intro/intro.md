@@ -12,7 +12,7 @@ Este documento é o **Manual de Instalação e Uso** da **Smart Ruler Eletromidi
 
 A Smart Ruler é um dispositivo essencial para a modernização e o gerenciamento eficiente dos nossos equipamentos de campo. Ela oferece um controle de energia inovador, permitindo o acionamento e desacionamento remoto, via nossa **Plataforma IoT Hub**, de até quatro tomadas independentes.
 
-O nucleo do sistema é um microcontrolador ESP32, garantindo comunicação estável e confiável com a rede.
+O núcleo do sistema é um microcontrolador ESP32, garantindo comunicação estável e confiável com a rede.
 
 ## Objetivo deste Manual
 
