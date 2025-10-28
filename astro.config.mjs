@@ -1,9 +1,27 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import mdx from '@astrojs/mdx';
+import vue from '@astrojs/vue';
 
 // https://astro.build/config
 export default defineConfig({
+	server: {
+		port: 4322,
+		host: true
+	},
+	vite: {
+		server: {
+			port: 4322,
+			strictPort: false,
+			hmr: {
+				protocol: 'ws',
+				host: 'localhost',
+				port: 4322,
+				clientPort: 4322
+			}
+		}
+	},
 	integrations: [
 		starlight({
 			title: 'Smart Ruler Eletromidia',
@@ -29,5 +47,7 @@ export default defineConfig({
 				},
 			],
 		}),
+		mdx(),
+		vue(),
 	],
 });

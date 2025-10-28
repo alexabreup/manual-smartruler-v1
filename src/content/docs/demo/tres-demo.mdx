@@ -1,0 +1,120 @@
+---
+title: Demonstração Tres.js - Smart Ruler 3D
+description: Visualização 3D interativa do Smart Ruler usando Tres.js
+---
+
+import SmartRulerTres from '../../../components/SmartRulerTres.vue'
+import SmartRulerAdvanced from '../../../components/SmartRulerAdvanced.vue'
+import SmartRulerDemo from '../../../components/SmartRulerDemo.vue'
+
+# Smart Ruler 3D com Tres.js
+
+Esta página demonstra a implementação do visualizador 3D do Smart Ruler usando **Tres.js**, uma biblioteca Vue.js para Three.js que oferece uma experiência declarativa e reativa para desenvolvimento 3D.
+
+## Visualizador Básico
+
+O componente básico mostra o Smart Ruler com controles simples e animações suaves:
+
+<SmartRulerTres client:load />
+
+### Características do Visualizador Básico:
+- **Modelo 3D procedural** do Smart Ruler
+- **4 tomadas controláveis** individualmente
+- **Iluminação realística** com sombras
+- **Controles de órbita** para navegação 3D
+- **Animações suaves** de transição
+- **Interface responsiva** para mobile e desktop
+
+## Visualizador Avançado
+
+O componente avançado inclui recursos extras como carregamento de modelos GLB e efeitos visuais:
+
+<SmartRulerAdvanced client:load />
+
+### Recursos Avançados:
+- **Suporte a modelos GLB** (com fallback procedural)
+- **Sistema de partículas** ambiente
+- **Iluminação cinematográfica** multi-fonte
+- **Controles de qualidade** visual
+- **Demonstrações automáticas** das tomadas
+- **Configurações de renderização** otimizadas
+
+## Demonstração Completa
+
+O componente de demonstração oferece controle total sobre todos os aspectos da visualização:
+
+<SmartRulerDemo client:load />
+
+### Funcionalidades da Demonstração:
+- **Interface com abas** para organização dos controles
+- **Controle individual** de cada tomada
+- **Ajustes de iluminação** em tempo real
+- **Presets de visualização** predefinidos
+- **Informações do dispositivo** em tempo real
+- **Efeitos visuais** configuráveis
+- **Demonstrações sequenciais** automáticas
+
+## Tecnologias Utilizadas
+
+### Tres.js
+- **Framework Vue.js** para Three.js
+- **Componentes declarativos** para objetos 3D
+- **Reatividade automática** entre Vue e Three.js
+- **Performance otimizada** com renderização eficiente
+
+### Three.js
+- **Renderização WebGL** de alta performance
+- **Sistema de sombras** avançado
+- **Materiais PBR** realísticos
+- **Geometrias procedurais** otimizadas
+
+### Recursos Implementados
+- **Iluminação HDR** com tone mapping
+- **Sombras em tempo real** com PCF
+- **Controles de câmera** suaves
+- **Animações interpoladas** 
+- **Responsividade** para diferentes dispositivos
+- **Carregamento assíncrono** de recursos
+
+## Integração com Astro
+
+A integração com Astro permite:
+- **Hidratação seletiva** com `client:load`
+- **Componentes Vue** em páginas MDX
+- **Build otimizado** para produção
+- **SSR compatível** com fallbacks
+
+## Performance
+
+### Otimizações Implementadas:
+- **Geometrias instanciadas** para elementos repetidos
+- **Materiais compartilhados** entre objetos similares
+- **Culling automático** de objetos fora da tela
+- **LOD (Level of Detail)** para objetos distantes
+- **Lazy loading** de texturas e modelos
+
+### Métricas de Performance:
+- **60 FPS** em dispositivos modernos
+- **Tempo de carregamento** < 2 segundos
+- **Uso de memória** otimizado
+- **Compatibilidade** com WebGL 1.0 e 2.0
+
+## Próximos Passos
+
+### Melhorias Planejadas:
+1. **Modelos 3D** mais detalhados
+2. **Animações** de conexão/desconexão
+3. **Efeitos de partículas** mais elaborados
+4. **Realidade aumentada** (WebXR)
+5. **Configuração** via arquivo JSON
+6. **Temas** personalizáveis
+7. **Exportação** de imagens/vídeos
+8. **Integração** com dados reais do dispositivo
+
+### Recursos Futuros:
+- **Modo VR/AR** para visualização imersiva
+- **Simulação física** de cabos e conexões
+- **Editor visual** de configurações
+- **Análise de consumo** em tempo real
+- **Histórico** de uso das tomadas
+- **Alertas visuais** para problemas

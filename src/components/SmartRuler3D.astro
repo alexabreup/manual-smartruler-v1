@@ -1,0 +1,512 @@
+---
+const { 
+  width = '100%',
+  height = '700px',
+  showInfo = true
+} = Astro.props;
+---
+
+<div class="smart-ruler-3d" style={`width: ${width}; height: ${height};`}>
+  <canvas class="viewer-canvas"></canvas>
+  <div class="viewer-loading">
+    <div class="loading-spinner"></div>
+    <p>Carregando Smart Ruler 3D...</p>
+  </div>
+  <div class="viewer-error" style="display: none;">
+    <p>Erro ao carregar visualizador 3D</p>
+  </div>
+  {showInfo && (
+    <div class="viewer-info">
+      <h4>Controles:</h4>
+      <p>🖱️ Arrastar: Rotacionar</p>
+      <p>🔍 Scroll: Zoom</p>
+      <p>👆 Clique: Informações da tomada</p>
+    </div>
+  )}
+  <div class="socket-info" style="display: none;">
+    <div class="info-content">
+      <h4 id="socket-title">Tomada 1</h4>
+      <p id="socket-status">Status: Ativa</p>
+      <p id="socket-type">Tipo: Controlada</p>
+      <button class="close-info">×</button>
+    </div>
+  </div>
+</div>
+
+<script>
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+  const containers = document.querySelectorAll('.smart-ruler-3d');
+  
+  containers.forEach(container => {
+    const canvas = container.querySelector('.viewer-canvas') as HTMLCanvasElement;
+    const loading = container.querySelector('.viewer-loading') as HTMLElement;
+    const errorDiv = container.querySelector('.viewer-error') as HTMLElement;
+    const socketInfo = container.querySelector('.socket-info') as HTMLElement;
+    const closeBtn = container.querySelector('.close-info') as HTMLElement;
+    
+    if (!canvas) return;
+    
+    try {
+      // Configuração da cena
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xf5f5f5);
+      
+      // Configuração da câmera
+      const camera = new THREE.PerspectiveCamera(
+        45, 
+        canvas.offsetWidth / canvas.offsetHeight, 
+        0.1, 
+        100
+      );
+      camera.position.set(6, 4, 6);
+      
+      // Configuração do renderer otimizado
+      const renderer = new THREE.WebGLRenderer({ 
+        canvas: canvas,
+        antialias: true,
+        alpha: true
+      });
+      renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      
+      // Configurações avançadas do renderer para materiais escuros
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.5;
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      
+      // Controles
+      const controls = new OrbitControls(camera, canvas);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.minDistance = 3;
+      controls.maxDistance = 15;
+      controls.maxPolarAngle = Math.PI / 2.2;
+      
+      // Sistema de iluminação otimizado para materiais escuros
+      function setupLighting() {
+        // Luz ambiente forte para clarear materiais escuros
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        scene.add(ambientLight);
+        
+        // Luz direcional principal
+        const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
+        mainLight.position.set(3, 5, 4);
+        mainLight.castShadow = true;
+        mainLight.shadow.mapSize.width = 2048;
+        mainLight.shadow.mapSize.height = 2048;
+        mainLight.shadow.camera.near = 0.5;
+        mainLight.shadow.camera.far = 50;
+        scene.add(mainLight);
+        
+        // Luz frontal para reduzir sombras
+        const frontLight = new THREE.DirectionalLight(0xffffff, 0.6);
+        frontLight.position.set(0, 2, 5);
+        scene.add(frontLight);
+        
+        // Luz traseira para contorno
+        const backLight = new THREE.DirectionalLight(0xffffff, 0.4);
+        backLight.position.set(0, 3, -5);
+        scene.add(backLight);
+        
+        // Luz lateral
+        const sideLight = new THREE.DirectionalLight(0xffffff, 0.3);
+        sideLight.position.set(-5, 2, 0);
+        scene.add(sideLight);
+        
+        // Luz hemisférica para suavizar
+        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.5);
+        scene.add(hemiLight);
+      }
+      
+      // Função para ajustar materiais escuros
+      function adjustDarkMaterials(object: THREE.Object3D) {
+        object.traverse((child: THREE.Object3D) => {
+          if (child instanceof THREE.Mesh && child.material) {
+            const material = child.material as THREE.MeshStandardMaterial;
+            
+            // Verificar se a cor é muito escura
+            const color = material.color;
+            const brightness = (color.r + color.g + color.b) / 3;
+            
+            if (brightness < 0.125) { // Cores < 0x202020
+              // Adicionar emissão para materiais muito escuros
+              material.emissive = new THREE.Color(0x0f0f0f);
+              material.emissiveIntensity = 0.15;
+              
+              // Clarear ligeiramente a cor
+              material.color.addScalar(0.06); // Equivalente a +0x101010
+            }
+            
+            // Ajustar propriedades físicas
+            material.roughness = 0.7;
+            material.metalness = 0.1;
+            material.needsUpdate = true;
+          }
+        });
+      }
+      
+      // Criar modelo procedural do Smart Ruler
+      function createSmartRuler() {
+        const smartRuler = new THREE.Group();
+        
+        // Base principal (0.8 x 2.8 x 0.12 unidades)
+        const baseGeometry = new THREE.BoxGeometry(0.8, 2.8, 0.12);
+        const baseMaterial = new THREE.MeshStandardMaterial({ 
+          color: 0x2a2a2a, // Ligeiramente mais claro que #292929
+          roughness: 0.8,
+          metalness: 0.1
+        });
+        const base = new THREE.Mesh(baseGeometry, baseMaterial);
+        base.castShadow = true;
+        base.receiveShadow = true;
+        base.userData = { type: 'base' };
+        smartRuler.add(base);
+        
+        // Posições das tomadas no eixo Y
+        const socketPositions = [1.05, 0.35, -0.35, -1.05];
+        const socketData = [
+          { active: true, name: 'Tomada 1', type: 'Controlada' },
+          { active: true, name: 'Tomada 2', type: 'Controlada' },
+          { active: true, name: 'Tomada 3', type: 'Controlada' },
+          { active: false, name: 'Entrada Direta', type: 'Sempre Ligada' }
+        ];
+        
+        socketPositions.forEach((yPos, index) => {
+          const socketGroup = new THREE.Group();
+          const isActive = socketData[index].active;
+          
+          // Corpo da tomada
+          const socketGeometry = new THREE.BoxGeometry(0.25, 0.35, 0.08);
+          const socketMaterial = new THREE.MeshStandardMaterial({
+            color: isActive ? 0xFF5722 : 0x666666, // Laranja ou cinza
+            emissive: isActive ? new THREE.Color(0x331100) : new THREE.Color(0x000000),
+            emissiveIntensity: isActive ? 0.1 : 0,
+            roughness: 0.6,
+            metalness: 0.2
+          });
+          
+          const socket = new THREE.Mesh(socketGeometry, socketMaterial);
+          socket.position.set(0, yPos, 0.08);
+          socket.castShadow = true;
+          socket.userData = { 
+            socketType: 'socket', 
+            index: index,
+            ...socketData[index]
+          };
+          socketGroup.add(socket);
+          
+          // Furos da tomada (padrão brasileiro)
+          const holeGeometry = new THREE.CylinderGeometry(0.015, 0.015, 0.02, 8);
+          const holeMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x151515,
+            emissive: new THREE.Color(0x050505),
+            emissiveIntensity: 0.1
+          });
+          
+          // Dois furos principais
+          const hole1 = new THREE.Mesh(holeGeometry, holeMaterial);
+          hole1.position.set(-0.04, yPos, 0.12);
+          hole1.rotation.x = Math.PI / 2;
+          socketGroup.add(hole1);
+          
+          const hole2 = new THREE.Mesh(holeGeometry, holeMaterial);
+          hole2.position.set(0.04, yPos, 0.12);
+          hole2.rotation.x = Math.PI / 2;
+          socketGroup.add(hole2);
+          
+          // Furo terra (menor)
+          const earthHole = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.01, 0.01, 0.02, 8),
+            holeMaterial
+          );
+          earthHole.position.set(0, yPos + 0.08, 0.12);
+          earthHole.rotation.x = Math.PI / 2;
+          socketGroup.add(earthHole);
+          
+          // LED indicador para tomadas ativas
+          if (isActive) {
+            const ledGeometry = new THREE.SphereGeometry(0.008, 8, 8);
+            const ledMaterial = new THREE.MeshStandardMaterial({
+              color: 0x36e700,
+              emissive: new THREE.Color(0x36e700),
+              emissiveIntensity: 0.8
+            });
+            
+            const led = new THREE.Mesh(ledGeometry, ledMaterial);
+            led.position.set(0.08, yPos - 0.12, 0.12);
+            socketGroup.add(led);
+          }
+          
+          smartRuler.add(socketGroup);
+        });
+        
+        // Detalhes metálicos
+        const metalGeometry = new THREE.BoxGeometry(0.82, 0.05, 0.02);
+        const metalMaterial = new THREE.MeshStandardMaterial({
+          color: 0xe7e7e7,
+          roughness: 0.3,
+          metalness: 0.8
+        });
+        
+        const metalStrip1 = new THREE.Mesh(metalGeometry, metalMaterial);
+        metalStrip1.position.set(0, 1.3, 0.07);
+        smartRuler.add(metalStrip1);
+        
+        const metalStrip2 = new THREE.Mesh(metalGeometry, metalMaterial);
+        metalStrip2.position.set(0, -1.3, 0.07);
+        smartRuler.add(metalStrip2);
+        
+        return smartRuler;
+      }
+      
+      // Raycasting para interação
+      const raycaster = new THREE.Raycaster();
+      const mouse = new THREE.Vector2();
+      
+      function onMouseClick(event: MouseEvent) {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+        
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(scene.children, true);
+        
+        if (intersects.length > 0) {
+          const object = intersects[0].object;
+          if (object.userData.socketType === 'socket') {
+            showSocketInfo(object.userData);
+          }
+        }
+      }
+      
+      function showSocketInfo(data: any) {
+        if (!socketInfo) return;
+        
+        const title = socketInfo.querySelector('#socket-title');
+        const status = socketInfo.querySelector('#socket-status');
+        const type = socketInfo.querySelector('#socket-type');
+        
+        if (title) title.textContent = data.name;
+        if (status) status.textContent = `Status: ${data.active ? 'Ativa' : 'Inativa'}`;
+        if (type) type.textContent = `Tipo: ${data.type}`;
+        
+        socketInfo.style.display = 'block';
+      }
+      
+      // Event listeners
+      canvas.addEventListener('click', onMouseClick);
+      
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          if (socketInfo) socketInfo.style.display = 'none';
+        });
+      }
+      
+      // Configurar cena
+      setupLighting();
+      const smartRulerModel = createSmartRuler();
+      adjustDarkMaterials(smartRulerModel);
+      scene.add(smartRulerModel);
+      
+      // Esconder loading
+      loading.style.display = 'none';
+      
+      // Loop de animação
+      function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+      }
+      
+      // Redimensionamento
+      function handleResize() {
+        const rect = canvas.getBoundingClientRect();
+        camera.aspect = rect.width / rect.height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(rect.width, rect.height);
+      }
+      
+      window.addEventListener('resize', handleResize);
+      animate();
+      
+      console.log('Smart Ruler 3D carregado com sucesso!');
+      
+    } catch (error) {
+      console.error('Erro ao inicializar Smart Ruler 3D:', error);
+      loading.style.display = 'none';
+      errorDiv.style.display = 'block';
+    }
+  });
+});
+</script>
+
+<style>
+.smart-ruler-3d {
+  position: relative;
+  margin: 2rem auto;
+  max-width: 1200px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.viewer-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+}
+
+.viewer-canvas:active {
+  cursor: grabbing;
+}
+
+.viewer-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #666;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #FF5722;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.viewer-error {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #e74c3c;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 8px;
+  border: 2px solid #e74c3c;
+}
+
+.viewer-info {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  backdrop-filter: blur(4px);
+  max-width: 200px;
+}
+
+.viewer-info h4 {
+  margin: 0 0 0.5rem 0;
+  color: #FF5722;
+  font-size: 1rem;
+}
+
+.viewer-info p {
+  margin: 0.25rem 0;
+  line-height: 1.4;
+}
+
+.socket-info {
+  position: absolute;
+  top: 50%;
+  right: 2rem;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid #FF5722;
+  border-radius: 8px;
+  padding: 1.5rem;
+  min-width: 200px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+}
+
+.info-content h4 {
+  margin: 0 0 0.5rem 0;
+  color: #FF5722;
+  font-size: 1.1rem;
+}
+
+.info-content p {
+  margin: 0.5rem 0;
+  color: #333;
+}
+
+.close-info {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #999;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.close-info:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .smart-ruler-3d {
+    margin: 1rem;
+    height: 500px !important;
+  }
+  
+  .viewer-info {
+    font-size: 0.8rem;
+    padding: 0.75rem;
+    max-width: 150px;
+  }
+  
+  .socket-info {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, -50%);
+    min-width: 250px;
+    z-index: 1000;
+  }
+}
+
+@media (max-width: 480px) {
+  .viewer-info {
+    display: none;
+  }
+}
+</style>
